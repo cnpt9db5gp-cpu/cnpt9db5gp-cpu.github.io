@@ -72,22 +72,23 @@ export function renderList(host, menu, { onFilter } = {}) {
   shell.append(frag);
   host.replaceChildren(shell);
 
-  /* ---- filtering ---- */
-  if (onFilter) {
-    filters.addEventListener("click", (e) => {
-      const btn = e.target.closest(".list__filter");
-      if (!btn) return;
-      const id = btn.dataset.cat;
+  /* ---- filtering ----
+     The listener is attached unconditionally. onFilter is optional and only
+     reports the choice upward (e.g. to sync the Explore nav); if it is
+     missing the filter still has to work. */
+  filters.addEventListener("click", (e) => {
+    const btn = e.target.closest(".list__filter");
+    if (!btn) return;
+    const id = btn.dataset.cat;
 
-      for (const b of filters.children) {
-        b.setAttribute("aria-pressed", String(b === btn));
-      }
-      for (const [cid, group] of groups) {
-        group.hidden = id !== "all" && cid !== id;
-      }
-      onFilter(id);
-    });
-  }
+    for (const b of filters.children) {
+      b.setAttribute("aria-pressed", String(b === btn));
+    }
+    for (const [cid, group] of groups) {
+      group.hidden = id !== "all" && cid !== id;
+    }
+    onFilter?.(id);
+  });
 
   return { groups };
 }

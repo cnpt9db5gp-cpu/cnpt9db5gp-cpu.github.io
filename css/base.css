@@ -7,6 +7,10 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* The scene layers bleed past the viewport on purpose (inset-inline: -6% /
+     -14%) so parallax never shows a gap. body{overflow-x:hidden} still lets
+     the page be panned programmatically; `clip` genuinely forbids it. */
+  overflow-x: clip;
 }
 
 body {
@@ -166,6 +170,7 @@ a { color: inherit; }
   border: 0;
   background: transparent;
   padding: var(--s-2) var(--s-4);
+  min-height: 38px;
   cursor: pointer;
   font-size: var(--fs-small);
   letter-spacing: 0.06em;
@@ -286,4 +291,22 @@ a { color: inherit; }
     transition-duration: .001ms !important;
   }
   .scene { display: none; }
+}
+/* ---------------------------------------------------------------- touch --
+   Pointer targets were 36-38px tall, under the 44px minimum (WCAG 2.5.8).
+   Only enlarged when the primary pointer is coarse, so desktop stays tight. */
+
+@media (pointer: coarse) {
+  .cat-nav__btn,
+  .mode-switch button,
+  .list__filter {
+    min-height: 44px;
+  }
+  .sheet__close {
+    width: 44px;
+    height: 44px;
+  }
+  .cat-nav {
+    padding: var(--s-3) var(--s-3) calc(var(--s-3) + env(safe-area-inset-bottom, 0px));
+  }
 }
