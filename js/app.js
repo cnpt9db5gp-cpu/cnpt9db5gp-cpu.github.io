@@ -99,6 +99,13 @@ function openSheet(id) {
   const img = new Image();
   img.alt = "";
   img.decoding = "async";
+  img.loading = "eager";
+  img.sizes = "(min-width: 700px) 620px, 100vw";
+  img.srcset = [
+    `assets/items/${item.id}-800.webp 800w`,
+    `assets/items/${item.id}-1200.webp 1200w`,
+    `assets/items/${item.id}.webp 2000w`,
+  ].join(", ");
   img.addEventListener("load", () => plate.append(img), { once: true });
   img.src = `assets/items/${item.id}.webp`;
 

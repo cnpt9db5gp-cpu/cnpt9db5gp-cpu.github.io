@@ -14,3 +14,5 @@ raw.txt
 
 # QR output is per-deployment (it encodes the live URL), not source
 qr/
+
+# Real photography lands in assets/items/ and IS committed -- it is the site.

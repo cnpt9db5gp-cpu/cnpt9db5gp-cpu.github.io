@@ -88,19 +88,41 @@ export function rafThrottle(fn) {
   };
 }
 
-/* --------------------------------------------------------- image fallback --
-   assets/items/<id>.webp doesn't exist yet. When a slot's image fails to
-   load, strip it so the .plate gradient underneath shows through instead of
-   a broken-image icon.                                                   */
+/* -------------------------------------------------------------- images --
+   assets/items/<id>.webp        master, 2000px
+   assets/items/<id>-1200.webp   tablet
+   assets/items/<id>-800.webp    phone
+   Written by tools/prep_images.py. Until a file exists the .plate gradient
+   underneath shows through, so nothing ever renders a broken image.        */
 
+/* The largest candidate is the master, named <id>.webp (not <id>-2000.webp) --
+   written by tools/prep_images.py. Naming it explicitly here keeps the srcset
+   from requesting a file that does not exist. */
+function srcsetFor(id) {
+  return [
+    `assets/items/${id}-800.webp 800w`,
+    `assets/items/${id}-1200.webp 1200w`,
+    `assets/items/${id}.webp 2000w`,
+  ].join(", ");
+}
+
+/**
+ * Image for a dish slot. The master is a fallback only -- a browser that
+ * supports srcset always picks a width from the list.
+ * Returns null if we cannot even offer a srcset, so the caller can skip the
+ * <img> entirely rather than issue a request we know will 404.
+ */
 export function dishImage(id, { sizes, loading = "lazy" } = {}) {
   const img = el("img", {
     src: `assets/items/${id}.webp`,
+    srcset: srcsetFor(id),
+    sizes,
     alt: "",
     loading,
     decoding: "async",
-    sizes,
   });
+  // Any failure (no file, or a 404 on every candidate) drops the <img> so the
+  // gradient + Thai glyph plate behind it is what shows.
   img.addEventListener("error", () => img.remove(), { once: true });
   return img;
 }
