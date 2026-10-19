@@ -1,0 +1,122 @@
+/* ============================================================================
+   List — the ordering view.
+   Fast, scannable, motionless. Also the fallback when Explore is turned off,
+   when the browser can't do the scroll layer, or under reduced-motion.
+   ========================================================================= */
+
+.list { position: relative; z-index: 2; padding: var(--s-7) 0 var(--s-9); }
+
+.list__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+.list__title { font-weight: 600; letter-spacing: 0.1em; }
+.list__meta { color: var(--ink-soft); font-size: var(--fs-small); }
+
+.list__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-6);
+}
+.list__filter {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai-tight);
+  font-size: var(--fs-small);
+  transition: color var(--dur-fast), border-color var(--dur-fast),
+              background var(--dur-fast);
+}
+.list__filter:hover { color: var(--ink); border-color: var(--line-strong); }
+.list__filter[aria-pressed="true"] {
+  background: var(--teak);
+  border-color: var(--teak);
+  color: var(--plaster-raised);
+}
+
+.list__group { margin-bottom: var(--s-7); }
+.list__group[hidden] { display: none; }
+
+.list__grouphead {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line);
+}
+.list__groupname { font-size: var(--fs-h3); font-weight: 500; }
+.list__groupthai {
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai);
+  color: var(--laterite-deep);
+  font-size: var(--fs-thai);
+}
+.list__groupcount {
+  margin-left: auto;
+  color: var(--teak-faint);
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.list__items { display: grid; gap: var(--s-2); }
+
+/* ------------------------------------------------------------- dish row -- */
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-4);
+  background: var(--plaster-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+.row:hover { border-color: var(--line-strong); }
+
+.row__thai {
+  display: block;
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai);
+}
+.row__en {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.9em;
+  line-height: var(--lh-latin);
+}
+.row__price {
+  color: var(--gold-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.row__dot {
+  flex: 1;
+  border-bottom: 1px dotted var(--line-strong);
+  transform: translateY(-0.25em);
+  min-width: var(--s-4);
+}
+
+@media (max-width: 520px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: var(--s-1);
+  }
+  .row__price { justify-self: start; }
+  .row__dot { display: none; }
+}

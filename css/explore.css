@@ -1,0 +1,294 @@
+/* ============================================================================
+   Explore — the cinematic scroll: 3D depth, lattice wipes, pinned scenes
+   ========================================================================= */
+
+.explore {
+  position: relative;
+  z-index: 2;
+  perspective: 1200px;
+  perspective-origin: 50% 45%;
+}
+
+/* ---------------------------------------------------------------- intro -- */
+
+.intro {
+  position: relative;
+  z-index: 3;
+  min-height: 92svh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: var(--s-8) 0;
+}
+/* A soft cream scrim so the wordmark always wins against the silhouettes. */
+.intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(58% 52% at 50% 44%,
+    rgba(247, 241, 230, .94) 0%,
+    rgba(247, 241, 230, .68) 52%,
+    rgba(247, 241, 230, 0) 78%);
+}
+.intro__eyebrow {
+  font-size: var(--fs-small);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.intro__name {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  font-size: var(--fs-display);
+  line-height: 1.02;
+  margin-top: var(--s-4);
+  color: var(--teak);
+}
+.intro__thai {
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai);
+  font-size: var(--fs-h2);
+  color: var(--laterite-deep);
+  margin-top: var(--s-3);
+}
+.intro__tag {
+  color: var(--ink-soft);
+  margin-top: var(--s-4);
+  font-size: var(--fs-body);
+}
+.intro__rule {
+  width: 92px;
+  height: 1px;
+  margin: var(--s-6) auto;
+  background: linear-gradient(to right,
+    transparent, var(--gold-leaf), transparent);
+  position: relative;
+}
+.intro__rule::after {
+  content: "";
+  position: absolute;
+  top: -4px; left: 50%;
+  width: 9px; height: 9px;
+  translate: -50% 0;
+  rotate: 45deg;
+  background: var(--gold-leaf);
+}
+.intro__cue {
+  margin-top: var(--s-6);
+  font-size: var(--fs-small);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teak-soft);
+  /* the horizon silhouettes run behind this; keep it readable */
+  text-shadow: 0 0 14px var(--plaster), 0 0 28px var(--plaster);
+}
+.intro__cue span { display: inline-block; animation: cue-bob 2.4s var(--ease-soft) infinite; }
+@keyframes cue-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+
+/* -------------------------------------------------------------- section -- */
+
+.cat {
+  position: relative;
+  padding: var(--s-9) 0;
+  transform-style: preserve-3d;
+}
+
+.cat__head {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  margin-bottom: var(--s-7);
+  padding: var(--s-4) var(--s-4) var(--s-6);
+}
+
+/* The lattice wipe: a veil that sweeps down over the header and away.
+   It starts at opacity 0, so if JS never runs (or the observer never fires)
+   there is no stray band left sitting above the header. */
+.cat__head::before {
+  content: "";
+  position: absolute;
+  inset: -8% -12%;
+  z-index: 1;
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(142,74,46,.16) 0 2px, transparent 2px 22px),
+    var(--plaster);
+  opacity: 0;
+  transform: translateY(-30%);
+  transition: transform var(--dur-slow) var(--ease-out),
+              opacity 260ms var(--ease-out);
+  pointer-events: none;
+}
+.cat.is-in .cat__head::before {
+  opacity: 1;
+  transform: translateY(105%);
+  transition: transform var(--dur-slow) var(--ease-out) 140ms,
+              opacity 160ms linear;
+}
+
+.cat__kicker {
+  font-size: var(--fs-small);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--laterite);
+  position: relative;
+  z-index: 2;
+}
+.cat__name {
+  font-weight: 500;
+  font-size: var(--fs-h2);
+  line-height: 1.06;
+  color: var(--teak);
+  margin-top: var(--s-2);
+  position: relative;
+  z-index: 2;
+}
+.cat__thai {
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai);
+  font-size: var(--fs-thai-lg);
+  color: var(--laterite-deep);
+  margin-top: var(--s-1);
+  position: relative;
+  z-index: 2;
+}
+.cat__chofa {
+  position: relative;
+  z-index: 2;
+  margin-top: var(--s-3);
+  color: var(--laterite);
+  opacity: .8;
+}
+.cat__count {
+  position: relative;
+  z-index: 2;
+  margin-top: var(--s-2);
+  font-size: var(--fs-small);
+  color: var(--teak-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----------------------------------------------------------------- grid -- */
+
+.cat__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--s-4);
+  transform-style: preserve-3d;
+}
+
+/* 3D depth is written by js/scroll.js as a transform on the card.          */
+.cat__grid .dish {
+  transition: border-color var(--dur-fast), box-shadow var(--dur-mid);
+}
+.cat__grid .dish:hover { border-color: var(--line-strong); box-shadow: var(--shadow-1); }
+
+/* ----------------------------------------------------- section flavour  -- */
+/* Drinks lean cooler and airier, desserts warm and gold. That per-category
+   shift is the "change the scene" idea, expressed through light.            */
+
+.cat--cool    { --tint: var(--jade); }
+.cat--warm    { --tint: var(--laterite); }
+.cat--sweet   { --tint: var(--lotus); }
+.cat--neutral { --tint: var(--gold-leaf); }
+
+.cat__glow {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 70%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(70% 60% at 50% 0%,
+    color-mix(in oklab, var(--tint), transparent 82%), transparent 72%);
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+.cat.is-in .cat__glow { opacity: .5; }
+
+/* ---------------------------------------------------------------- close -- */
+
+.outro {
+  min-height: 62svh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: var(--s-4);
+  padding: var(--s-8) 0;
+}
+.outro__thai {
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai);
+  font-size: var(--fs-h3);
+  color: var(--laterite-deep);
+}
+
+/* --------------------------------------------------------------- detail -- */
+
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: var(--s-4);
+  background: rgba(58, 46, 38, .38);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity var(--dur-mid) var(--ease-out);
+}
+.sheet[hidden] { display: none; }
+.sheet.is-open { opacity: 1; }
+
+.sheet__panel {
+  position: relative;
+  width: min(100%, 620px);
+  background: var(--plaster-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  transform: translateY(14px) scale(.985);
+  transition: transform var(--dur-mid) var(--ease-out);
+}
+.sheet.is-open .sheet__panel { transform: none; }
+
+.sheet__plate {
+  aspect-ratio: 3 / 2;
+  border-bottom: 1px solid var(--line);
+}
+.sheet__body { padding: var(--s-6); }
+.sheet__cat {
+  font-size: var(--fs-small);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--laterite);
+}
+.sheet__thai {
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai);
+  font-size: var(--fs-h3);
+  margin-top: var(--s-2);
+}
+.sheet__en { color: var(--ink-soft); margin-top: var(--s-1); }
+.sheet__price {
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-text);
+  font-size: var(--fs-h3);
+  margin-top: var(--s-4);
+}
+.sheet__close {
+  position: absolute;
+  top: var(--s-3); right: var(--s-3);
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-glass);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}

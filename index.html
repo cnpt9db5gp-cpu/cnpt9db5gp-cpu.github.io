@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MHOKAENGMAEYAI — Thai desserts &amp; drinks</title>
+<meta name="description" content="The MHOKAENGMAEYAI menu: Thai desserts and drinks, 45 items across 9 categories.">
+<meta name="theme-color" content="#F7F1E6">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+
+<!-- Shared from a table QR: make the link look right in WhatsApp/iMessage. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MHOKAENGMAEYAI">
+<meta property="og:title" content="MHOKAENGMAEYAI — Thai desserts & drinks">
+<meta property="og:description" content="45 Thai desserts and drinks across 9 categories. Scan to view the menu.">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/scene.css">
+<link rel="stylesheet" href="css/explore.css">
+<link rel="stylesheet" href="css/list.css">
+</head>
+
+<body>
+
+<!-- ============================ Ayutthaya silhouettes ==================== -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <!-- prang: the tiered corncob spire of Wat Phra Ram / Wat Mahathat.
+         Built from primitives so the tiers stay legible at small sizes. -->
+    <symbol id="g-prang" viewBox="0 0 100 260">
+      <rect x="24" y="210" width="52" height="12"/>
+      <rect x="15" y="224" width="70" height="14"/>
+      <rect x="6"  y="240" width="88" height="20"/>
+      <ellipse cx="50" cy="205" rx="24" ry="9.5"/>
+      <ellipse cx="50" cy="191" rx="20" ry="8.5"/>
+      <ellipse cx="50" cy="177" rx="16.5" ry="7.5"/>
+      <ellipse cx="50" cy="164" rx="13" ry="6.5"/>
+      <ellipse cx="50" cy="152" rx="9.5" ry="5.5"/>
+      <ellipse cx="50" cy="141" rx="6.5" ry="7"/>
+      <rect x="48.2" y="124" width="3.6" height="12"/>
+      <path d="M50 104 L53.5 122 L50 129 L46.5 122 Z"/>
+    </symbol>
+
+    <!-- chedi: the bell dome on a stepped base, as at Wat Phra Sri Sanphet.
+         dome -> harmika -> tapering spire rings -> finial -->
+    <symbol id="g-chedi" viewBox="0 0 120 220">
+      <rect x="16" y="196" width="88" height="7"/>
+      <rect x="8"  y="205" width="104" height="7"/>
+      <rect x="0"  y="214" width="120" height="6"/>
+      <path d="M27 196 A33 33 0 0 1 93 196 Z"/>
+      <rect x="49" y="152" width="22" height="13"/>
+      <rect x="54" y="138" width="12" height="14"/>
+      <rect x="57" y="126" width="6"  height="12"/>
+      <path d="M60 106 L63.5 124 L60 132 L56.5 124 Z"/>
+    </symbol>
+
+    <!-- chofa: the naga-bird finial that crowns an Ayutthaya roof -->
+    <symbol id="g-chofa" viewBox="0 0 40 48">
+      <path d="M18 0 C26 10 30 20 26 30 C32 26 38 28 40 34
+               C34 44 20 46 12 38 C6 32 6 22 12 16
+               C12 24 16 26 20 22 C22 16 20 8 18 0 Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ================================ scene ================================ -->
+<div class="scene" aria-hidden="true">
+  <div class="scene__sky"></div>
+  <div class="scene__sun"></div>
+
+  <div class="scene__far">
+    <svg viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax meet">
+      <use href="#g-prang" x="70"   y="20"  width="92"  height="240"/>
+      <use href="#g-prang" x="215"  y="86"  width="64"  height="180"/>
+      <use href="#g-prang" x="330"  y="128" width="48"  height="146"/>
+      <use href="#g-prang" x="782"  y="66"  width="76"  height="206"/>
+      <use href="#g-prang" x="898"  y="122" width="52"  height="156"/>
+      <use href="#g-prang" x="1000" y="34"  width="88"  height="228"/>
+      <use href="#g-chedi" x="450"  y="150" width="74"  height="120"/>
+      <use href="#g-chedi" x="560"  y="166" width="60"  height="110"/>
+      <use href="#g-chedi" x="660"  y="158" width="66"  height="118"/>
+    </svg>
+  </div>
+
+  <div class="scene__mid">
+    <svg viewBox="0 0 1200 260" preserveAspectRatio="xMidYMax meet">
+      <use href="#g-chedi" x="30"   y="80"  width="118" height="180"/>
+      <use href="#g-chedi" x="215"  y="118" width="88"  height="140"/>
+      <use href="#g-chedi" x="370"  y="58"  width="136" height="200"/>
+      <use href="#g-chedi" x="575"  y="112" width="82"  height="146"/>
+      <use href="#g-chedi" x="730"  y="128" width="70"  height="130"/>
+      <use href="#g-chedi" x="880"  y="92"  width="110" height="166"/>
+      <use href="#g-chedi" x="1060" y="122" width="78"  height="136"/>
+    </svg>
+  </div>
+
+  <div class="scene__lattice"></div>
+  <div class="scene__motes" id="motes"></div>
+</div>
+
+<div class="pointer-light" id="pointerLight" aria-hidden="true"></div>
+
+<!-- =============================== chrome ================================ -->
+<div class="mode-switch" role="group" aria-label="View mode">
+  <button type="button" id="modeExplore" aria-pressed="true">Explore</button>
+  <button type="button" id="modeList" aria-pressed="false">List</button>
+</div>
+
+<nav class="cat-nav" aria-label="Menu categories">
+  <ul class="cat-nav__list shell" id="catNav"></ul>
+</nav>
+
+<!-- ================================ views ================================ -->
+<main id="viewExplore" class="explore"></main>
+<main id="viewList" class="list" hidden></main>
+
+<footer class="site-foot">
+  <div class="shell">
+    <a class="brand" href="#/">
+      <span class="brand__name" data-brand-name>MHOKAENGMAEYAI</span>
+      <span class="brand__thai lang-th" data-brand-thai></span>
+    </a>
+    <p style="margin-top:1rem">45 items · 9 categories · prices in THB</p>
+  </div>
+</footer>
+
+<!-- ============================== dish sheet ============================== -->
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetThai">
+  <div class="sheet__panel">
+    <div class="sheet__plate plate" id="sheetPlate">
+      <span class="plate__glyph lang-th" id="sheetGlyph"></span>
+    </div>
+    <div class="sheet__body">
+      <p class="sheet__cat" id="sheetCat"></p>
+      <h2 class="sheet__thai" id="sheetThai"></h2>
+      <p class="sheet__en" id="sheetEn"></p>
+      <p class="sheet__price" id="sheetPrice"></p>
+    </div>
+    <button type="button" class="sheet__close" id="sheetClose" aria-label="Close">✕</button>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

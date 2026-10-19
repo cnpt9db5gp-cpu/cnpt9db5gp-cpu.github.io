@@ -1,0 +1,13 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Scratch: the raw pdftotext dump the parser works from
+raw.txt
+
+# Generated: rebuilt from data/*.json with tools/build_data.py
+js/menu.data.js
+
+# QR output is per-deployment (it encodes the live URL), not source
+qr/

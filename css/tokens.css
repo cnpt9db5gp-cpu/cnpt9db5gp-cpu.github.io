@@ -1,0 +1,105 @@
+/* ============================================================================
+   Tokens — Ayutthaya, cream palette
+   Reference: aged lime plaster (Wat Phra Sri Sanphet's white chedi),
+   faded laterite temple brick, restrained gold leaf, dark teak.
+   ========================================================================= */
+
+:root {
+  /* --- surfaces ------------------------------------------------------- */
+  --plaster:          #F7F1E6;
+  --plaster-raised:   #FCF8F1;
+  --stucco:           #E8DCC8;
+  --stucco-soft:      #F0E7D8;
+
+  /* --- laterite / terracotta ------------------------------------------ */
+  --laterite:         #B4643C;
+  --laterite-deep:    #8E4A2E;
+  --laterite-wash:    #D9A78F;
+  /* Temple silhouettes read through Chao Phraya haze: warm, never grey. */
+  --haze-far:         #E8CBB6;
+  --haze-near:        #D3A187;
+
+  /* --- gold -------------------------------------------------------------
+     --gold-leaf is DECORATIVE ONLY: ~2.5:1 on plaster, fails WCAG for text.
+     Anything the eye must read uses --gold-text (~4.9:1) or --teak.        */
+  --gold-leaf:        #C9A227;
+  --gold-text:        #9A7B1E;
+  --gold-wash:        #E8D9A8;
+
+  /* --- teak / ink ------------------------------------------------------ */
+  --teak:             #3A2E26;
+  --teak-soft:        #6B5A4C;
+  --teak-faint:       #9C8B7C;
+
+  /* --- accents --------------------------------------------------------- */
+  --jade:             #7A8B72;
+  --lotus:            #D9A7A0;
+
+  /* --- sky: the day-arc, driven by scroll progress ---------------------- */
+  --sky-1:            #FBF6EC;   /* dawn cream   */
+  --sky-2:            #F6EEDF;   /* morning      */
+  --sky-3:            #F3E3CE;   /* midday       */
+  --sky-4:            #EFD2B4;   /* late amber   */
+  --sky-halo:         #FFF8EA;
+
+  /* --- semantic -------------------------------------------------------- */
+  --ink:              var(--teak);
+  --ink-soft:         var(--teak-soft);
+  --line:             rgba(58, 46, 38, 0.14);
+  --line-strong:      rgba(58, 46, 38, 0.26);
+  --focus:            #8E4A2E;
+  --surface-glass:    rgba(252, 248, 241, 0.72);
+
+  /* --- type ------------------------------------------------------------
+     Thai stacks vowel marks above and below the x-height, so every Thai
+     block gets extra leading. Latin-only blocks use --lh-latin.            */
+  --font-thai: "IBM Plex Sans Thai", "Noto Sans Thai", "Leelawadee UI",
+               "Sarabun", "Tahoma", system-ui, sans-serif;
+  --font-latin: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+
+  --fs-display:  clamp(1.7rem, 8vw, 7.5rem);
+  --fs-h2:       clamp(2.1rem, 6vw, 3.6rem);
+  --fs-h3:       clamp(1.35rem, 3vw, 1.9rem);
+  --fs-thai-lg:  clamp(1.5rem, 4.2vw, 2.35rem);
+  --fs-thai:     clamp(1.05rem, 2.3vw, 1.3rem);
+  --fs-body:     clamp(0.98rem, 1.6vw, 1.06rem);
+  --fs-small:    0.82rem;
+
+  --lh-thai:     1.85;   /* room for ั ี ึ ื ่ ้ above and below */
+  --lh-thai-tight: 1.5;
+  --lh-latin:    1.5;
+
+  /* --- space / shape --------------------------------------------------- */
+  --s-1: 0.25rem;  --s-2: 0.5rem;  --s-3: 0.75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;   --s-6: 2rem;     --s-7: 3rem;     --s-8: 4.5rem;
+  --s-9: 7rem;
+
+  --radius:     2px;          /* Ayutthaya is plaster and stone: almost square */
+  --radius-lg:  4px;
+
+  --shadow-1: 0 1px 2px rgba(58, 46, 38, .05),
+              0 4px 14px rgba(58, 46, 38, .05);
+  --shadow-2: 0 2px 6px rgba(58, 46, 38, .07),
+              0 14px 40px rgba(58, 46, 38, .08);
+
+  /* --- motion ---------------------------------------------------------- */
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --dur-fast:  180ms;
+  --dur-mid:   420ms;
+  --dur-slow:  900ms;
+
+  --shell-max: 1180px;
+}
+
+/* Parallax depths are written to these as the page scrolls (--p0..--p4) and
+   read back by the scene layers, so one scroll pass drives every layer. */
+:root {
+  --p-far:  0px;
+  --p-mid:  0px;
+  --p-near: 0px;
+  --day:    0;   /* 0 = dawn, 1 = late amber */
+  /* Scene amplitude: full drama on the hero, then recedes to an ambient
+     backdrop so the temple horizon never fights the menu content. */
+  --scene-a: 1;
+}
