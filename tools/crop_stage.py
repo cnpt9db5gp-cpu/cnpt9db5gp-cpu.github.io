@@ -6,14 +6,17 @@ Restaurant photos arrive from phones: portrait, sometimes stored sideways
 3:2 landscape slots (list thumbnails, dish sheet plate), so each photo needs
 one decision: which horizontal band survives.
 
-    python3 tools/crop_stage.py                      # stage, no previews
+    python3 tools/crop_stage.py                      # stage new/changed files
     python3 tools/crop_stage.py --montage            # + one check sheet
-    python3 tools/crop_stage.py --refresh all        # re-stage every file
+    python3 tools/crop_stage.py --refresh all        # re-stage everything
 
 MAP records:  (source path, cy) where cy is the fraction of the ORIENTED
-height on which the 3:2 crop band is centred -- 0.5 is the middle. Entries
-whose id is not confirmed sit under UNCONFIRMED and are skipped unless
---refresh all is given; "pending" needs a human (see commits/notes).
+height on which the 3:2 crop band is centred -- 0.5 is the middle. When a
+dish cannot be named from its photo alone, add the entry as
+"UNCONFIRMED <desc>" and I ask the customer; entries starting UNCONFIRMED
+are skipped. Then run prep_images.py on the stage folder.
+
+Staged 3:2 crops land in staging/ (gitignored -- regenerable from source).
 """
 import argparse
 from pathlib import Path
@@ -50,7 +53,7 @@ MAP = {
         DROPBOX / "Desserts/Photo 27-9-2569 BE, 11 36 44.jpg", 0.55),
 }
 
-OUTDIR = Path("/tmp/opencode/stage-batch1")
+OUTDIR = ROOT / "staging"
 
 
 def band(img, cy):
@@ -66,15 +69,14 @@ def main():
     ap.add_argument("--montage", action="store_true",
                     help="also write one check sheet of all crops")
     ap.add_argument("--refresh", default="changed", choices=("changed", "all"),
-                    help="'all' also re-stages UNCONFIRMED entries")
+                    help="'all' re-stages every file, not just new/changed")
     args = ap.parse_args()
 
     OUTDIR.mkdir(parents=True, exist_ok=True)
     thumbs = []
     for item_id, (src, cy) in MAP.items():
         if item_id.startswith("UNCONFIRMED"):
-            tag = " (UNCONFIRMED - skipped)" if args.refresh != "all" else ""
-            print(f"  skip  {src.name}{tag}")
+            print(f"  skip  {src.name}  (UNCONFIRMED - needs a dish name)")
             continue
 
         with Image.open(src) as im:

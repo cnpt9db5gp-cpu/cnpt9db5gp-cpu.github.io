@@ -15,4 +15,7 @@ raw.txt
 # QR output is per-deployment (it encodes the live URL), not source
 qr/
 
+# Staged 3:2 photo crops -- regenerable from tools/crop_stage.py + source
+staging/
+
 # Real photography lands in assets/items/ and IS committed -- it is the site.
