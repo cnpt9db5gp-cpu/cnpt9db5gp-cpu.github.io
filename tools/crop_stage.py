@@ -46,8 +46,7 @@ MAP = {
         DROPBOX / "Drinks/Photo 30-1-2569 BE, 11 02 53.jpg", 0.52),
     "banoffee-macchiato-float": (
         DROPBOX / "Drinks/Photo 5-8-2568 BE, 09 53 01.jpg", 0.45),
-    # ---- photo known, dish not: needs a human ----
-    "UNCONFIRMED  (white scoop, golden crumble, translucent ball on blue plate)": (
+    "pla-krim-kai-tao": (
         DROPBOX / "Desserts/Photo 27-9-2569 BE, 11 36 44.jpg", 0.55),
 }
 
