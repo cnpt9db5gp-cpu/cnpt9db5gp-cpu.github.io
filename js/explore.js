@@ -1,5 +1,12 @@
 /* ============================================================================
    Explore — renders the cinematic scroll: intro, one scene per category.
+
+   Modeled on the CommeSoie reference: photography is the subject, rendered
+   large and floating in whitespace, while dishes that have no photo yet stay
+   quiet typographic lines. Photographed dishes become "heroes" (a big plate,
+   landscape or portrait depending on the asset we have); the rest are sparse
+   text lines with a price, which keeps the menu scannable without inventing
+   imagery we don't have.
    ========================================================================= */
 
 import { el, baht, dishImage } from "./util.js";
@@ -21,26 +28,85 @@ function splitCat(name) {
   };
 }
 
-function dishCard(item, sizes) {
-  const glyph = el("span", { class: "plate__glyph lang-th", text: item.thai[0] });
-  const slot = el("span", { class: "dish__slot plate" }, glyph);
+/* ---------------------------------------------------------------- hero -- */
 
-  // The photo doesn't exist yet; dishImage() removes itself on error and the
-  // gradient + glyph underneath shows through.
-  slot.append(dishImage(item.id, { sizes, loading: "lazy" }));
-
+function heroLine(item) {
   return el("a", {
-      class: "dish",
+      class: "hero__meta",
+      href: `#/dish/${item.id}`,
+    },
+    el("span", { class: "hero__thai lang-th", text: item.thai }),
+    el("span", { class: "hero__en", text: item.english }),
+    el("span", { class: "hero__price", text: baht(item.price) }),
+  );
+}
+
+/* A photographed dish: a large plate in the aspect we actually have.
+   Drinks are photographed as tall cups -> portrait plates; plated desserts
+   read best as landscape. Both portraits and landscape masters exist.     */
+const DRINK_CATS = new Set([
+  "coffee", "tea", "milk-smoothie", "soda", "float", "herbal-drinks", "other",
+]);
+
+function spreadHero(item, flip, catId) {
+  const port = Boolean(item.photo && item.photo.portrait && DRINK_CATS.has(catId));
+  const glyph = el("span", { class: "plate__glyph lang-th", text: item.thai[0] });
+  const plate = el("figure", { class: `hero__plate${port ? " --portrait" : " --landscape"} plate` }, glyph);
+
+  // The photo doesn't exist (or is wrong aspect); dishImage() removes itself
+  // on error so the gradient + glyph under it is what shows.
+  plate.append(dishImage(item.id, {
+    sizes: port ? "(min-width: 900px) 34vw, 62vw" : "(min-width: 900px) 62vw, 90vw",
+    loading: "lazy",
+    portrait: port,
+  }));
+
+  return el("article", {
+      class: `spread-hero${flip ? " --flip" : ""}`,
+      dataset: { depth: "", id: item.id },
+    },
+    el("a", { class: "hero__plate-link",
+              href: `#/dish/${item.id}`,
+              "aria-label": `${item.english} — ${item.thai}` }, plate),
+    heroLine(item),
+  );
+}
+
+/* An unphotographed dish: one quiet text line. Still a link, still
+   deep-layered, but it doesn't pretend to have a picture.                 */
+function spreadLine(item, small) {
+  return el("a", {
+      class: small ? "spread-line --small" : "spread-line",
       href: `#/dish/${item.id}`,
       dataset: { depth: "", id: item.id },
     },
-    slot,
-    el("span", { class: "dish__text" },
-      el("span", { class: "dish__thai", text: item.thai }),
-      el("span", { class: "dish__en",   text: item.english }),
-    ),
-    el("span", { class: "dish__price", text: baht(item.price) }),
+    el("span", { class: "line__thai lang-th", text: item.thai }),
+    el("span", { class: "line__en", text: item.english }),
+    el("span", { class: "line__price", text: baht(item.price) }),
   );
+}
+
+/* ------------------------------------------------------------ category -- */
+
+function spread(cat) {
+  /* Rhythm: photographed dishes become heroes (alignment alternating so
+     consecutive heroes sit right, then left); unphotographed dishes stay
+     text lines whose indent alternates so the column doesn't feel like a
+     table. Consecutive heroes re-flip on each other.                     */
+  const nodes = [];
+  let runs = 0;
+  let flips = 0;
+
+  for (const item of cat.items) {
+    if (item.photo) {
+      nodes.push(spreadHero(item, (flips++) % 2 === 1, cat.id));
+      runs = 0;
+    } else {
+      nodes.push(spreadLine(item, runs % 2 === 1));
+      runs++;
+    }
+  }
+  return nodes;
 }
 
 export function renderExplore(host, menu) {
@@ -61,10 +127,6 @@ export function renderExplore(host, menu) {
   for (const cat of menu.categories) {
     const { en, th } = splitCat(cat.name);
 
-    const grid = el("div", { class: "cat__grid" },
-      cat.items.map((i) => dishCard(i, "(min-width: 900px) 22vw, 300px")),
-    );
-
     frag.append(el("section", {
         class: `cat cat--${MOOD[cat.id] || "neutral"}`,
         id: `cat-${cat.id}`,
@@ -82,7 +144,7 @@ export function renderExplore(host, menu) {
               el("use", { href: "#g-chofa" }))),
           el("p", { class: "cat__count", text: `${cat.itemCount} items` }),
         ),
-        grid,
+        el("div", { class: "cat__spread" }, spread(cat)),
       ),
     ));
   }

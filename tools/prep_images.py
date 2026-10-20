@@ -34,11 +34,28 @@ ASPECT_TOL = 0.04                    # 4%: accept, resizing only
 
 IMAGE_EXT = {".png", ".jpg", ".jpeg", ".webp", ".avif", ".bmp", ".tif", ".tiff"}
 
+# Portrait twin files ("<id>-p.jpg") carry their own aspect and sizes.
+P_ASPECT = 2 / 3
+P_WIDTHS = (800, 1200, 1600)
+
 
 def slug(s: str) -> str:
     s = unicodedata.normalize("NFKD", s)
     s = re.sub(r"[^\w\s-]", " ", s, flags=re.UNICODE)
     return re.sub(r"[\s_]+", "-", s.strip().lower()).strip("-")
+
+
+def crop_to(im, target):
+    """Centre-crop an RGB image to the width/height ratio `target`."""
+    w, h = im.size
+    ratio = w / h
+    if ratio > target:                      # too wide: trim sides
+        new_w = int(h * target)
+        left = (w - new_w) // 2
+        return im.crop((left, 0, left + new_w, h))
+    new_h = int(w / target)                 # too tall: trim top/bottom
+    top = (h - new_h) // 2
+    return im.crop((0, top, w, top + new_h))
 
 
 def norm(stem: str) -> str:
@@ -92,6 +109,44 @@ def main():
     print(f"{len(files)} image(s) in {args.source}\n")
     ok, warned, unmatched = [], [], []
 
+    # Portrait twins are processed first so the landscape matcher below
+    # never sees "<id>-p" (its stem regex would treat it as <id>).
+    files, portraits = [], []
+    for cand in sorted(p for p in args.source.iterdir()
+                       if p.is_file() and p.suffix.lower() in IMAGE_EXT):
+        if cand.stem.endswith("-p") and cand.stem[:-2] in items:
+            portraits.append(cand)
+        else:
+            files.append(cand)
+
+    for path in portraits:
+        item_id = path.stem[:-2]
+        item = items[item_id]
+        with Image.open(path) as im:
+            im = im.convert("RGB")
+        w, h = im.size
+        ratio = w / h
+        target = P_ASPECT
+        drift = abs(ratio - target) / target
+        if drift > ASPECT_TOL:
+            if not args.crop:
+                warned.append((path.name, item_id,
+                               f"{w}x{h} is {ratio:.2f}:1, portrait asks 0.67:1"
+                               " -- run with --crop"))
+                continue
+            im = crop_to(im, target)
+            w, h = im.size
+        for width in P_WIDTHS:
+            scale = min(1.0, width / im.width)
+            size = (width, max(1, round(im.height * scale)))
+            out = OUT / (f"{item_id}-p.webp" if width == P_WIDTHS[-1]
+                         else f"{item_id}-p-{width}.webp")
+            im.resize(size, Image.LANCZOS).save(
+                out, "WEBP", quality=QUALITY, method=6)
+        kb = sum(f.stat().st_size for f in OUT.glob(f"{item_id}-p*.webp")) // 1024
+        ok.append(item_id)
+        print(f"  ok   {item_id + '-p':<42} {w}x{h}  -> {kb} KB portrait")
+
     for path in files:
         key = norm(path.stem)
         item_id = by_norm.get(key)
@@ -115,15 +170,7 @@ def main():
                 if not args.crop:
                     warned.append((path.name, item_id, msg + " -- re-generate or run with --crop"))
                     continue
-                im = im.convert("RGB")
-                if ratio > target:                      # too wide: trim sides
-                    new_w = int(h * target)
-                    left = (w - new_w) // 2
-                    im = im.crop((left, 0, left + new_w, h))
-                else:                                  # too tall: trim top/bottom
-                    new_h = int(w / target)
-                    top = (h - new_h) // 2
-                    im = im.crop((0, top, w, top + new_h))
+                im = crop_to(im.convert("RGB"), target)
                 w, h = im.size
 
             im = im.convert("RGB")

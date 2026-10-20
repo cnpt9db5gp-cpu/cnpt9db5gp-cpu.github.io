@@ -1,0 +1,38 @@
+<!doctype html><html><body>
+<p id="out">running…</p>
+<script>
+location.hash = "#/";
+addEventListener("load", () => setTimeout(go, 600));
+async function go() {
+  const iframe = document.createElement("iframe");
+  iframe.src = "/#/";
+  iframe.style.cssText = "width:1440px;height:955px;border:0";
+  document.body.append(iframe);
+  await new Promise((ok) => { iframe.onload = ok; });
+  await new Promise((r) => setTimeout(r, 900));
+  const d = iframe.contentDocument;
+  const plates = [...d.querySelectorAll(".hero__plate")].slice(0, 3);
+  const lines = plates.map((p) => {
+    const img = p.querySelector("img");
+    const s = iframe.contentWindow.getComputedStyle(p);
+    const i = img ? iframe.contentWindow.getComputedStyle(img) : null;
+    const r = p.getBoundingClientRect(), ir = img ? img.getBoundingClientRect() : null;
+    return {
+      cls: p.className,
+      box: `${Math.round(r.width)}x${Math.round(r.height)}`,
+      aspectRatio: s.aspectRatio,
+      display: s.display, position: s.position,
+      rules: [...document.styleSheets].flatMap(sh => { try { return [...sh.cssRules] } catch { return [] } })
+        .filter(x => x.selectorText && /hero__plate|plate > img|\.plate\b/.test(x.selectorText))
+        .map(x => x.selectorText),
+      img: i ? {
+        box: `${Math.round(ir.width)}x${Math.round(ir.height)}`,
+        position: i.position, width: i.width, height: i.height,
+        objectFit: i.objectFit, src: img.currentSrc?.split("/").pop(),
+      } : "none",
+    };
+  });
+  document.getElementById("out").textContent = JSON.stringify(lines, null, 1);
+  iframe.remove();
+}
+</script></body></html>

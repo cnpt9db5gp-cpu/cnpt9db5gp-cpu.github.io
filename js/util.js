@@ -98,24 +98,26 @@ export function rafThrottle(fn) {
 /* The largest candidate is the master, named <id>.webp (not <id>-2000.webp) --
    written by tools/prep_images.py. Naming it explicitly here keeps the srcset
    from requesting a file that does not exist. */
-function srcsetFor(id) {
+function srcsetFor(id, portrait = false) {
+  const base = portrait ? `${id}-p` : id;
+  const master = portrait ? 1600 : 2000;
   return [
-    `assets/items/${id}-800.webp 800w`,
-    `assets/items/${id}-1200.webp 1200w`,
-    `assets/items/${id}.webp 2000w`,
+    `assets/items/${base}-800.webp 800w`,
+    `assets/items/${base}-1200.webp 1200w`,
+    `assets/items/${base}.webp ${master}w`,
   ].join(", ");
 }
 
 /**
- * Image for a dish slot. The master is a fallback only -- a browser that
+ * Image for a dish plate. The master is a fallback only -- a browser that
  * supports srcset always picks a width from the list.
  * Returns null if we cannot even offer a srcset, so the caller can skip the
  * <img> entirely rather than issue a request we know will 404.
  */
-export function dishImage(id, { sizes, loading = "lazy" } = {}) {
+export function dishImage(id, { sizes, loading = "lazy", portrait = false } = {}) {
   const img = el("img", {
-    src: `assets/items/${id}.webp`,
-    srcset: srcsetFor(id),
+    src: `assets/items/${id}${portrait ? "-p" : ""}.webp`,
+    srcset: srcsetFor(id, portrait),
     sizes,
     alt: "",
     loading,

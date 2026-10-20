@@ -79,7 +79,11 @@ export default {
           "thai": "ชาไทย",
           "english": "Thai Tea",
           "price": 65,
-          "category": "TEA / ชา"
+          "category": "TEA / ชา",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         },
         {
           "id": "pure-matcha",
@@ -93,7 +97,11 @@ export default {
           "thai": "ชาเขียว",
           "english": "Green Tea",
           "price": 65,
-          "category": "TEA / ชา"
+          "category": "TEA / ชา",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         },
         {
           "id": "iced-lemon-tea",
@@ -150,7 +158,11 @@ export default {
           "thai": "สับปะรดพริกเกลือ",
           "english": "Spicy Pineapple Smoothie",
           "price": 89,
-          "category": "MILK & SMOOTHIE / นมและสมูทตี้"
+          "category": "MILK & SMOOTHIE / นมและสมูทตี้",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         }
       ]
     },
@@ -179,7 +191,11 @@ export default {
           "thai": "เสาวรสโซดา",
           "english": "Passion Fruit Soda",
           "price": 70,
-          "category": "SODA / โซดา"
+          "category": "SODA / โซดา",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         }
       ]
     },
@@ -222,7 +238,11 @@ export default {
           "thai": "บานอฟฟี่มัคคิอาโตโฟลต",
           "english": "Banoffee Macchiato Float",
           "price": 159,
-          "category": "FLOAT / เครื่องดื่มไอศกรีม"
+          "category": "FLOAT / เครื่องดื่มไอศกรีม",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         }
       ]
     },
@@ -323,7 +343,11 @@ export default {
           "thai": "ปลากริมไข่เต่า",
           "english": "Pla Krim Kai Tao",
           "price": 50,
-          "category": "THAI DESSERTS / ขนมไทย"
+          "category": "THAI DESSERTS / ขนมไทย",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         },
         {
           "id": "sticky-rice-with-black-beans-in-coconut-milk",
@@ -344,7 +368,11 @@ export default {
           "thai": "บวดฟักทอง",
           "english": "Poached Pumpkin in Coconut Milk",
           "price": 50,
-          "category": "THAI DESSERTS / ขนมไทย"
+          "category": "THAI DESSERTS / ขนมไทย",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         }
       ]
     },
@@ -359,21 +387,33 @@ export default {
           "thai": "ครองแครงไอศกรีมกะทิ",
           "english": "Coconut Ice Cream with Krong Krang in Coconut Milk",
           "price": 109,
-          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม"
+          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         },
         {
           "id": "ice-cream-with-sticky-rice-and-black-beans",
           "thai": "ข้าวเหนียวถั่วดำไอศกรีม",
           "english": "Ice Cream with Sticky Rice and Black Beans",
           "price": 109,
-          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม"
+          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         },
         {
           "id": "thai-mixed-ruammitr-ice-cream-with-bua-loy",
           "thai": "บัวลอยไอศกรีมรวมมิตร",
           "english": "Thai Mixed (Ruammitr) Ice Cream with Bua Loy",
           "price": 109,
-          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม"
+          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         },
         {
           "id": "coconut-milk-ice-cream-with-black-sticky-rice-and-longan",
@@ -394,7 +434,11 @@ export default {
           "thai": "ไอศกรีมกล้วยไข่เชื่อม",
           "english": "Caramelized Thai Bananas with Ice Cream",
           "price": 139,
-          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม"
+          "category": "THAI DESSERTS WITH ICE CREAM / ขนมไทยไอศกรีม",
+          "photo": {
+            "landscape": true,
+            "portrait": true
+          }
         }
       ]
     }

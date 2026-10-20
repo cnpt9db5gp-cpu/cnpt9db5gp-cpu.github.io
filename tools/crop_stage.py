@@ -11,12 +11,17 @@ one decision: which horizontal band survives.
     python3 tools/crop_stage.py --refresh all        # re-stage everything
 
 MAP records:  (source path, cy) where cy is the fraction of the ORIENTED
-height on which the 3:2 crop band is centred -- 0.5 is the middle. When a
-dish cannot be named from its photo alone, add the entry as
-"UNCONFIRMED <desc>" and I ask the customer; entries starting UNCONFIRMED
-are skipped. Then run prep_images.py on the stage folder.
+height on which the 3:2 crop band is centred -- 0.5 is the middle. The
+same source is also cut to a 2:3 portrait band ("<id>-p.jpg") for the
+Explore spread, which alternates landscape and portrait plates the way
+the CommeSoie reference does; an optional record (src, cy, cyp)
+overrides the portrait band centre.
 
-Staged 3:2 crops land in staging/ (gitignored -- regenerable from source).
+When a dish cannot be named from its photo alone, add the entry as
+"UNCONFIRMED <desc>" and ask the customer; UNCONFIRMED entries are
+skipped. Run prep_images.py on the stage folder afterwards.
+
+Staged crops land in staging/ (gitignored -- regenerable from source).
 """
 import argparse
 from pathlib import Path
@@ -56,12 +61,21 @@ MAP = {
 OUTDIR = ROOT / "staging"
 
 
-def band(img, cy):
+def band(img, cy, aspect=ASPECT):
+    """Crop box to the width/height ratio `aspect`. cy centres the surviving
+    band on whichever axis runs short (height for tall sources, width for
+    wide sources); cx stays centred."""
     w, h = img.size
-    bh = round(w / ASPECT)
-    top = round(cy * h - bh / 2)
-    top = max(0, min(top, h - bh))
+    if w / h > aspect:                      # too wide: widen band → trim height
+        bw = round(h * aspect)
+        left = max(0, min(round(0.5 * w - bw / 2), w - bw))
+        return (left, 0, left + bw, h)
+    bh = round(w / aspect)                  # too tall: trim top/bottom
+    top = max(0, min(round(cy * h - bh / 2), h - bh))
     return (0, top, w, top + bh)
+
+
+P_ASPECT = 2 / 3                          # portrait twin for the spread
 
 
 def main():
@@ -74,7 +88,8 @@ def main():
 
     OUTDIR.mkdir(parents=True, exist_ok=True)
     thumbs = []
-    for item_id, (src, cy) in MAP.items():
+    for item_id, entry in MAP.items():
+        src, cy = entry[0], entry[1]
         if item_id.startswith("UNCONFIRMED"):
             print(f"  skip  {src.name}  (UNCONFIRMED - needs a dish name)")
             continue
@@ -82,20 +97,25 @@ def main():
         with Image.open(src) as im:
             o = ImageOps.exif_transpose(im).convert("RGB")
         w, h = o.size
+        cyp = entry[2] if len(entry) > 2 else cy
 
         ow = 520                      # montage thumb of the source
         th = o.resize((ow, round(h * ow / w)), Image.LANCZOS)
         thumbs.append((item_id, src.name, th, cy))
 
-        dest = OUTDIR / f"{item_id}.jpg"
-        fresh = not dest.exists() or dest.stat().st_mtime < src.stat().st_mtime
-        if args.refresh == "all" or fresh:
-            o.crop(band(o, cy)).save(dest, "JPEG", quality=92)
-            fresh = True
+        fresh_l = (OUTDIR / f"{item_id}.jpg").exists()
+        fresh_p = (OUTDIR / f"{item_id}-p.jpg").exists()
+        updated = args.refresh == "all" or not fresh_l or not fresh_p \
+            or (OUTDIR / f"{item_id}.jpg").stat().st_mtime < src.stat().st_mtime
+        if updated:
+            o.crop(band(o, cy)).save(OUTDIR / f"{item_id}.jpg", "JPEG", quality=92)
+            o.crop(band(o, cyp, P_ASPECT)).save(OUTDIR / f"{item_id}-p.jpg",
+                                                "JPEG", quality=92)
 
-        c = Image.open(dest)
-        print(f"  ok    {item_id:<40} {w}x{h} -> {c.size[0]}x{c.size[1]}")
-        c.close()
+        c = Image.open(OUTDIR / f"{item_id}.jpg")
+        p = Image.open(OUTDIR / f"{item_id}-p.jpg")
+        print(f"  ok    {item_id:<40} {w}x{h} -> {c.size[0]}x{c.size[1]} + {p.size[0]}x{p.size[1]}")
+        c.close(); p.close()
 
     if not args.montage:
         return

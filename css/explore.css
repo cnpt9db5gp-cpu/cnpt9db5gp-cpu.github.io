@@ -170,20 +170,112 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ----------------------------------------------------------------- grid -- */
+/* --------------------------------------------------------------- spread -- */
+/* The CommeSoie composition: photography large and floating, text quiet.
+   Heroes carry plates in the aspect of the asset we actually have. Dishes
+   without photography are sparse text lines so the scene doesn't sell
+   imagery it doesn't have — they upgrade to heroes when the photo lands.   */
 
-.cat__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--s-4);
+.cat__spread {
   transform-style: preserve-3d;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(44px, 8vh, 88px);
+  padding-block: var(--s-6) var(--s-8);
 }
 
-/* 3D depth is written by js/scroll.js as a transform on the card.          */
-.cat__grid .dish {
-  transition: border-color var(--dur-fast), box-shadow var(--dur-mid);
+/* depth.js writes transforms on [data-depth]; the article (not the plate)
+   is the moved layer so the caption stays coherent.                        */
+.spread-hero {
+  display: flex;
+  flex-direction: column;
+  max-width: 90%;
+  margin-inline: 0;
 }
-.cat__grid .dish:hover { border-color: var(--line-strong); box-shadow: var(--shadow-1); }
+.spread-hero.--flip { margin-inline: 0 0 auto; }   /* sits right */
+
+.hero__plate {
+  position: relative;
+  margin: 0;
+}
+.hero__plate.--landscape { aspect-ratio: 3 / 2; }
+.hero__plate.--portrait  { aspect-ratio: 2 / 3; }
+.hero__plate-link {
+  display: block;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-2);
+}
+.spread-hero { width: min(72%, 620px); }
+.spread-hero .hero__plate.--portrait { width: min(46%, 340px); }
+/* --flip portrait plates park right */
+.spread-hero.--flip .hero__plate.--portrait { margin-left: auto; }
+
+.hero__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0 var(--s-3);
+  flex-wrap: wrap;
+  text-decoration: none;
+  padding: var(--s-3) 0 0;
+}
+.hero__thai {
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai);
+  font-size: var(--fs-h3);
+  color: var(--ink);
+}
+.hero__en {
+  font-size: var(--fs-small);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.hero__price {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-body);
+  color: var(--gold-text);
+}
+
+/* ----------------------------------------------------------------- lines -- */
+/* Unphotographed dishes: one quiet line each, alternating slight indents.  */
+
+.spread-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0 var(--s-3);
+  text-decoration: none;
+  padding-block: 2px;
+  color: var(--ink-soft);
+  max-width: 78%;
+}
+.spread-line .line__thai {
+  font-family: var(--font-thai);
+  line-height: var(--lh-thai-tight);
+  font-size: 1.05rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.spread-line .line__en {
+  font-size: var(--fs-small);
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spread-line .line__price {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--teak-faint);
+  white-space: nowrap;
+}
+.spread-line:hover .line__thai { color: var(--laterite); }
+/* the link grid: name — en — price; indent alternation */
+.spread-line.--small { margin-left: clamp(12px, 4vw, 40px); }
+
+.spread-hero:hover .hero__thai { color: var(--laterite); }
 
 /* ----------------------------------------------------- section flavour  -- */
 /* Drinks lean cooler and airier, desserts warm and gold. That per-category
