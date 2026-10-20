@@ -151,6 +151,26 @@ a { color: inherit; }
 }
 
 /* ---------------------------------------------------------------- modes  -- */
+/* The reference's corners: everything printed over the scene, quiet type,
+   no pills or filled bars. The active half keeps an underline, not a fill. */
+
+.wordmark {
+  position: fixed;
+  top: var(--s-4);
+  left: var(--s-4);
+  z-index: 50;
+  text-decoration: none;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.06rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  opacity: .92;
+}
+.wordmark::after { content: "."; }        /* printed as "mhokaengmaeyai."    */
+.wordmark,
+[data-wordmark] { text-transform: lowercase; }
+.wordmark:hover { opacity: 1; }
 
 .mode-switch {
   position: fixed;
@@ -158,30 +178,98 @@ a { color: inherit; }
   right: var(--s-4);
   z-index: 50;
   display: inline-flex;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--surface-glass);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  gap: var(--s-4);
+  border: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .mode-switch button {
   appearance: none;
   border: 0;
   background: transparent;
-  padding: var(--s-2) var(--s-4);
+  padding: var(--s-2) 0;
   min-height: 38px;
   cursor: pointer;
   font-size: var(--fs-small);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  transition: background var(--dur-fast), color var(--dur-fast);
+  color: var(--ink-faint, var(--ink-soft));
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast), border-color var(--dur-fast);
 }
 .mode-switch button[aria-pressed="true"] {
-  background: var(--teak);
-  color: var(--plaster-raised);
+  color: var(--ink);
+  border-bottom-color: var(--ink);
 }
+.mode-switch button:hover { color: var(--ink); }
+
+/* bottom furniture: the living section label + the order link */
+.chrome-foot {
+  position: fixed;
+  inset-inline: var(--s-4);
+  bottom: calc(var(--s-4) + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-4);
+  pointer-events: none;
+}
+.chrome-foot__label {
+  font-family: var(--font-latin);
+  font-size: var(--fs-small);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  opacity: .85;
+}
+.chrome-foot__order {
+  pointer-events: auto;
+  font-size: var(--fs-small);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-fast);
+}
+.chrome-foot__order:hover { border-bottom-color: var(--ink); }
+
+/* thin printed corner marks, exactly the reference's .corner furniture */
+.corner {
+  position: fixed;
+  z-index: 50;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  border-color: var(--line-strong);
+}
+.corner--tl {
+  top: var(--s-3);
+  left: var(--s-3);
+  border-left: 1px solid;
+  border-top: 1px solid;
+}
+.corner--bl {
+  bottom: calc(var(--s-3) + env(safe-area-inset-bottom, 0px));
+  left: var(--s-3);
+  border-left: 1px solid;
+  border-bottom: 1px solid;
+}
+
+/* The pills strip can reach the bottom corners on narrow desktops and
+   mobile, so below 1100px only the top furniture stays (wordmark, switch).
+   List mode owns its own bottom band; the corner furniture steps aside.  */
+@media (max-width: 1099px) {
+  .chrome-foot { display: none; }
+  .corner--bl { display: none; }
+}
+@media (min-width: 1100px) {
+  .cat-nav { bottom: var(--s-8); }
+}
+body[data-mode="list"] .chrome-foot,
+body[data-mode="list"] .corner { display: none; }
 
 /* ------------------------------------------------------------- dish card */
 
@@ -312,6 +400,7 @@ a { color: inherit; }
   .list__filter {
     min-height: 44px;
   }
+  .mode-switch button { padding-inline: var(--s-3); }
   .sheet__close {
     width: 44px;
     height: 44px;

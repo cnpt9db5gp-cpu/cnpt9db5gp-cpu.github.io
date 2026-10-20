@@ -110,10 +110,25 @@
 <div class="pointer-light" id="pointerLight" aria-hidden="true"></div>
 
 <!-- =============================== chrome ================================ -->
+<!-- Reference-chrome: wordmark over the top-left corner, view switch over
+     the top-right, the living section name bottom-left, "Order" bottom-right.
+     Everything sits directly on the scene, like printed corner furniture.  -->
+<a class="wordmark" href="#/" aria-label="MHOKAENGMAEYAI — back to top of the menu">
+  <span data-wordmark>MHOKAENGMAEYAI</span>
+</a>
+
 <div class="mode-switch" role="group" aria-label="View mode">
   <button type="button" id="modeExplore" aria-pressed="true">Explore</button>
   <button type="button" id="modeList" aria-pressed="false">List</button>
 </div>
+
+<div class="chrome-foot">
+  <p class="chrome-foot__label" id="chromeSection"></p>
+  <a class="chrome-foot__order" href="#/list">Order</a>
+</div>
+
+<div class="corner corner--tl" aria-hidden="true"></div>
+<div class="corner corner--bl" aria-hidden="true"></div>
 
 <nav class="cat-nav" aria-label="Menu categories">
   <ul class="cat-nav__list shell" id="catNav"></ul>

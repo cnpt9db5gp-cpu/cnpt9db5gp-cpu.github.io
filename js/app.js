@@ -33,6 +33,11 @@ function paintBrand() {
   for (const n of document.querySelectorAll("[data-brand-name]")) {
     n.textContent = menu.brand.name;
   }
+  /* The wordmark renders lowercase with the period, the way the cups print
+     it ("mhokaengmaeyai."), via CSS; the data carries the plain name.       */
+  for (const n of document.querySelectorAll("[data-wordmark]")) {
+    n.textContent = menu.brand.name;
+  }
   for (const n of document.querySelectorAll("[data-brand-thai]")) {
     n.textContent = menu.brand.thai || "";
     n.hidden = !menu.brand.thai;
@@ -169,6 +174,18 @@ function trackActiveCategory() {
   if (!sections.length) return;
   if (!("IntersectionObserver" in window)) return;
 
+  /* The chrome's bottom-left corner mirrors the same signal: the name of
+     the section currently in the middle of the screen, lower-cased, the
+     way the reference keeps its project label printed in the chrome.     */
+  const mirror = (id) => {
+    const label = document.getElementById("chromeSection");
+    if (!label) return;
+    const cat = menu.categories.find((c) => c.id === id);
+    label.textContent = cat
+      ? cat.name.split("/")[0].trim().toLowerCase()
+      : menu.brand.tagline_en.toLowerCase();
+  };
+
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
@@ -177,6 +194,7 @@ function trackActiveCategory() {
         for (const b of catNav.querySelectorAll(".cat-nav__btn")) {
           b.setAttribute("aria-current", String(b.dataset.cat === id));
         }
+        mirror(id);
       }
     },
     { rootMargin: "-45% 0px -45% 0px" }
@@ -191,6 +209,11 @@ function boot() {
   renderExplore(exploreHost, menu);
   renderList(listHost, menu);
   buildCatNav();
+
+  // The corner label reads as the brand until the first section owns the
+  // middle of the viewport.
+  const corner = document.getElementById("chromeSection");
+  if (corner) corner.textContent = menu.brand.tagline_en.toLowerCase();
 
   initScene();
   initReveals(exploreHost);
