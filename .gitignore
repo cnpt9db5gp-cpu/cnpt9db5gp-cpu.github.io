@@ -19,3 +19,6 @@ qr/
 staging/
 
 # Real photography lands in assets/items/ and IS committed -- it is the site.
+
+# Verification helpers at the project root are deleted before they matter.
+/_probe.html
